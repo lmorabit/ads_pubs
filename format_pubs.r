@@ -232,7 +232,7 @@ str3 <- '\\textbf{First Author}\\\\[-18pt] \n'
 str4 <- '\\textbf{Second Author}\\\\[-18pt] \n' 
 str5 <- '\\textbf{Co-Author}\\\\[-18pt] \n' 
 str6 <- '\\textbf{Conference proceedings}\\\\[-18pt] \n' 
-strl1 <- '\\begin{itemize}'
+strl1 <- '\\begin{itemize}\n'
 strl2 <- '\\end{itemize} \n'  
 
 mylines <- c( str1, str2 )
