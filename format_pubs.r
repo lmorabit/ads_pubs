@@ -15,7 +15,7 @@
 #       NB: do not change this format line or it will break the code
 # 5) Click 'Download to File' and save the file somewhere.
 #       NB: File must exist in directory you run the script, or you should give an absolute path
-# 6) Change the 'myname' value to your last name, and change 'myfile' if you did not use the default downloaded file name
+# 6) Change the 'myname' value to your last name, and change 'myfile' if you did not use the default downloaded file name. Select if you want to sort on year, citation or on chronological only.
 # 7) Run from the command line as:
 #       > Rscript format_pubs.r
 # NOTE: you will probably need to add/update the journal names/journal abbreviation lists as necessary. Just make sure the index of the name and abbreviation are the same in each vector. 
