@@ -44,6 +44,8 @@ check_jrnl <- function( string_to_check ){
         string_to_check <- gsub( jrnl, journal_abbrv[jrnl_idx], string_to_check )
         chk_val <- 1
     }
+    # also check arxiv and keep as journal
+    if ( grep( 'arXiv', string_to_check ) == 1 ) chk_val <- 1
 
     return( list( chk_val=chk_val, pub=string_to_check ) )
 }
@@ -205,19 +207,24 @@ for ( bibit in bibitems ){
 
 
 ## loop through lists to number and add items
+total_cite <- 0
 
-first_formatted <- format_lists( first_author, chronological=do_chron )
-second_formatted <- format_lists( second_author, chronological=do_chron )
-co_formatted <- format_lists( co_author, chronological=do_chron )
-conf_formatted <- format_lists( conf_proceed, chronological=do_chron )
-
-## collect citation info
-first_cite <- first_formatted$ncite
-second_cite <- second_formatted$ncite
-co_cite <- co_formatted$ncite
-conf_cite <- conf_formatted$ncite
-
-total_cite <- first_cite + second_cite + co_cite + conf_cite
+if ( length( first_author ) > 0 ){
+	first_formatted <- format_lists( first_author, chronological=do_chron )
+	total_cite <- total_cite + first_formatted$ncite
+} 
+if ( length( second_author ) > 0 ){
+	second_formatted <- format_lists( second_author, chronological=do_chron )
+	total_cite <- total_cite + second_formatted$ncite
+}
+if ( length( co_author ) > 0 ){
+	co_formatted <- format_lists( co_author, chronological=do_chron )
+	total_cite <- total_cite + co_formatted$ncite
+}
+if ( length( conf_proceed ) > 0 ){
+	conf_formatted <- format_lists( conf_proceed, chronological=do_chron )
+	total_cite <- total_cite + conf_formatted$ncite
+}
 
 str1 <- '\\mysec{Publication Record}\n'
 str2 <- paste( c( length(first_author), 'first-author,', length(second_author), 'second-author, and', length(co_author),'co-author peer-reviewed publications; also', length(conf_proceed), 'conference proceedings. Total of', total_cite, 'citations as of',format(Sys.Date(),"%d %b %Y"),'.\\\\[-6pt] \n' ), collapse=' ' )
@@ -225,13 +232,18 @@ str3 <- '\\textbf{First Author}\\\\[-18pt] \n'
 str4 <- '\\textbf{Second Author}\\\\[-18pt] \n' 
 str5 <- '\\textbf{Co-Author}\\\\[-18pt] \n' 
 str6 <- '\\textbf{Conference proceedings}\\\\[-18pt] \n' 
-strl1 <- '\\blip'
-strl2 <- '\\eli \n'  
+strl1 <- '\\begin{itemize}'
+strl2 <- '\\end{itemize} \n'  
 
-mylines <- c( str1, str2, str3, strl1, first_formatted$pubs, strl2, str4, strl1, second_formatted$pubs, strl2, str5, strl1, co_formatted$pubs, strl2, str6, strl1, conf_formatted$pubs, strl2 )
+mylines <- c( str1, str2 )
+if ( length( first_author ) > 0 ) mylines <- c( mylines, str3, strl1, first_formatted$pubs, strl2 )
+if ( length( second_author ) > 0 ) mylines <- c( mylines, str4, strl1, second_formatted$pubs, strl2 )
+if ( length( co_author ) > 0 ) mylines <- c( mylines, str5, strl1, co_formatted$pubs, strl2 )
+if ( length( conf_proceed ) > 0 ) mylines <- c( mylines, str6, strl1, conf_formatted$pubs, strl2 )
+
 
 writeLines( mylines, con='mypubs.tex' )
-print( 'Done, mypubs.tex written.' )
+cat( 'Done, mypubs.tex written.\n' )
 
 
 
