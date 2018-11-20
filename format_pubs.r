@@ -45,7 +45,7 @@ check_jrnl <- function( string_to_check ){
         chk_val <- 1
     }
     # also check arxiv and keep as journal
-    if ( grep( 'arXiv', string_to_check ) == 1 ) chk_val <- 1
+    if ( length(grep( 'arXiv', string_to_check )) == 1 ) chk_val <- 1
 
     return( list( chk_val=chk_val, pub=string_to_check ) )
 }
