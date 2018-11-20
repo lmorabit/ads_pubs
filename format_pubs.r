@@ -227,7 +227,8 @@ if ( length( conf_proceed ) > 0 ){
 }
 
 str1 <- '\\textbf{Publication Record}\\\\ \n'
-str2 <- paste( c( length(first_author), 'first-author,', length(second_author), 'second-author, and', length(co_author),'co-author peer-reviewed publications; also', length(conf_proceed), 'conference proceedings. Total of', total_cite, 'citations as of',format(Sys.Date(),"%d %b %Y"),'.\\\\[-6pt] \n' ), collapse=' ' )
+todays_date <- paste( format(Sys.Date(),"%d %b %Y"), '.', sep='' )
+str2 <- paste( c( length(first_author), 'first-author,', length(second_author), 'second-author, and', length(co_author),'co-author peer-reviewed publications; also', length(conf_proceed), 'conference proceedings. Total of', total_cite, 'citations as of',todays_date,'\\\\[-6pt] \n' ), collapse=' ' )
 str3 <- '\\textbf{First Author}\\\\[-18pt] \n' 
 str4 <- '\\textbf{Second Author}\\\\[-18pt] \n' 
 str5 <- '\\textbf{Co-Author}\\\\[-18pt] \n' 
