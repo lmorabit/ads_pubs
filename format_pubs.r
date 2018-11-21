@@ -11,7 +11,7 @@
 # 2) Select 'Export' > 'Other Formats'
 # 3) Select 'Custom format'
 # 4) Use the following custom format:
-#   %ZEncoding:latex %5.3A XXXtextit{%T}. %q, %V, %p-%P. XXXtextbf{%Y}, cit. %c %D  \n
+#   %ZEncoding:latex %5.3A XXXtextit{%T}. %J, %V, %p-%P. XXXtextbf{%Y}, cit. %c %D  \n
 #       NB: do not change this format line or it will break the code
 # 5) Click 'Download to File' and save the file somewhere.
 #       NB: File must exist in directory you run the script, or you should give an absolute path
@@ -61,14 +61,19 @@ format_lists <- function( my_list, chronological=FALSE ){
     for ( ii in seq(1,length(my_list)) ){
         ## add \item to beginning
         my_list[ii] <- paste( '\\item', my_list[ii] )
+        ## get number of citations
         tmp <- strsplit( my_list[ii], ',' )[[1]]
+        cite_string <- tmp[length(tmp)]
+        ## if there are no citations, add a zero
+        if ( length( strsplit( cite_string, ' ' )[[1]] ) < 4 ) cite_string <- gsub( 'cit.', 'cit. 0', cite_string )
+        tmp[length(tmp)] <- cite_string
         n_cite <- c( n_cite, as.numeric( strsplit( tmp[length(tmp)], ' ' )[[1]][3] ) )
-        tmpd <- strsplit( tmp[length(tmp)], ' ' )[[1]][4]
-        pub_year <- c( pub_year, as.numeric( strsplit( tmpd, '/' )[[1]][2] ) ) 
+        tmpd <- strsplit( cite_string, ' ' )[[1]][4]
+        pub_year <- c( pub_year, as.numeric( strsplit( tmpd, '/' )[[1]][2] ) )
         pub_month <- c( pub_month, as.numeric( strsplit( tmpd, '/' )[[1]][1] ) )
         ## drop the date from the end
-        tmp <- strsplit( my_list[ii], ' ' )[[1]]
-        my_list[ii] <- paste( tmp[seq(1,length(tmp)-1)], collapse=' ' )
+        tmp[length(tmp)] <- paste( strsplit(cite_string, ' ')[[1]][c(1,2,3)], collapse=' ' )
+        my_list[ii] <- paste( tmp, collapse='' )
     }
 
     ## loop through years
