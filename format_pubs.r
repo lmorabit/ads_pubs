@@ -115,11 +115,9 @@ bibit <- ''
 while ( i <= length(A) ){
 
     tmp <- A[i]
-    if ( tmp == "" ){
-        bibitems <- c( bibitems, trimws(bibit) )
+    if ( tmp != "" ){
+        bibitems <- c( bibitems, trimws(tmp) )
         bibit <- ''
-    } else {
-        bibit <- paste( bibit, A[i], sep=' ' )   
     }
     i <- i + 1
 }
@@ -159,19 +157,22 @@ conf_proceed <- c()
 
 for ( bibit in bibitems ){
 
-    tmp <- strsplit( bibit, ';' )[[1]]
+    #tmp <- strsplit( bibit, ';' )[[1]]
+    tmp <- strsplit( bibit, ',' )[[1]]
     lastname <- strsplit( tmp[1], ',' )[[1]]
     if ( lastname[1] == myname ){
         ## first author, bold name
-        #bold_author <- paste( c('\\textbf{', tmp[1], ',', tmp[2], '} '), collapse='' )
-        bold_author <- paste( c('\\textbf{', tmp[1], '}'), collapse='' )
-        ## check if it's a 2-author paper
-        if ( grepl( ' and ', bold_author ) ){
-            ## move the trailing }
-            bold_author <- gsub( '}', '', bold_author )
-            bold_author <- gsub( ' and', '} and', bold_author )   
-        }
-        pub_item <- paste( c( bold_author, tmp[seq(3,length(tmp))]), collapse=',' )
+	## first check if it's a two-author paper only
+	if ( length(tmp) == 1 ){
+	    ## split the string
+	    tmp1 <- strsplit( tmp, ' and ' )[[1]]
+	    pub_item <- paste( c( '\\textbf{', tmp1[1], '} and ', tmp1[2]), collapse = '' )
+
+	} else {
+	    #bold_author <- paste( c('\\textbf{', tmp[1], ',', tmp[2], '} '), collapse='' )
+            bold_author <- paste( c('\\textbf{', tmp[1], '}'), collapse='' )
+	    pub_item <- paste( c( bold_author, tmp[seq(2,length(tmp))]), collapse=',' )
+	}
         ## check if journal
         result <- check_jrnl( pub_item )
         if ( result$chk_val == 0 ){
@@ -182,8 +183,10 @@ for ( bibit in bibitems ){
             first_author <- c( first_author, result$pub )
         }
     } else {
+	cat( tmp[3], '\n' )
         ## check second author
-	lastname <- strsplit( tmp[2], ',' )[[1]]
+	#lastname <- strsplit( tmp[2], ',' )[[1]]
+	lastname <- strsplit( tmp[3], ',' )[[1]]
         if ( trimws(lastname[1]) == myname ){
             bold_author <- paste( c('\\textbf{', tmp[2], '}'), collapse='' )
             pub_item <- paste( c( tmp[1], bold_author, tmp[seq(3,length(tmp))]) , collapse=',' )
@@ -236,15 +239,15 @@ if ( length( conf_proceed ) > 0 ){
 	total_cite <- total_cite + conf_formatted$ncite
 }
 
-str1 <- '\\textbf{Publication Record}\\\\ \n'
+str1 <- '\\mysec{Publication Record} \\\\[-6pt]\n'
 todays_date <- paste( format(Sys.Date(),"%d %b %Y"), '.', sep='' )
 str2 <- paste( c( length(first_author), 'first-author,', length(second_author), 'second-author, and', length(co_author),'co-author peer-reviewed publications; also', length(conf_proceed), 'conference proceedings. Total of', total_cite, 'citations as of',todays_date,'\\\\[-6pt] \n' ), collapse=' ' )
 str3 <- '\\textbf{First Author}\\\\[-18pt] \n' 
 str4 <- '\\textbf{Second Author}\\\\[-18pt] \n' 
 str5 <- '\\textbf{Co-Author}\\\\[-18pt] \n' 
 str6 <- '\\textbf{Conference proceedings}\\\\[-18pt] \n' 
-strl1 <- '\\begin{itemize}\n'
-strl2 <- '\\end{itemize} \n'
+strl1 <- '\\blip\n'
+strl2 <- '\\eli \n'  
 
 mylines <- c( str1, str2 )
 if ( length( first_author ) > 0 ) mylines <- c( mylines, str3, strl1, first_formatted$pubs, strl2 )
