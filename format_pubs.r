@@ -183,7 +183,7 @@ for ( bibit in bibitems ){
             first_author <- c( first_author, result$pub )
         }
     } else {
-	cat( tmp[3], '\n' )
+	#cat( tmp[3], '\n' )
         ## check second author
 	#lastname <- strsplit( tmp[2], ',' )[[1]]
 	lastname <- strsplit( tmp[3], ',' )[[1]]
