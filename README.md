@@ -23,7 +23,7 @@ BEFORE USING THE SCRIPT
 2) Select 'Export' > 'Other Formats'
 3) Select 'Custom format'
 4) Use the following custom format:
-   %ZEncoding:latex %5.3A XXXtextit{%T}. %J, %V, %p-%P. XXXtextbf{%Y}, cit. %c %D  \n
+   %ZEncoding:latex %5.3A XXXtextit{%T}. %J, %V, %p-%P. XXXtextbf{%Y}, cit. %c %D  \n   
       NB: do not change this format line or it will break the code
 5) Click 'Download to File' and save the file somewhere.
       NB: File must exist in directory you run the script, or you should give an absolute path
